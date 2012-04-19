@@ -3,7 +3,9 @@
 class MY_Session extends CI_Session {
 
     public function __construct() {
-        session_start();
+        if (!isset($_SESSION)) {
+            session_start();
+        }
 
         return parent::__construct();
     }
@@ -33,9 +35,8 @@ class MY_Session extends CI_Session {
 
         $expire = ($this->sess_expire_on_close === TRUE) ? 0 : $this->sess_expiration + time();
 
-        
-        $_SESSION[$this->sess_cookie_name] = $cookie_data;
 
+        $_SESSION[$this->sess_cookie_name] = $cookie_data;
     }
 
     /**
@@ -51,7 +52,7 @@ class MY_Session extends CI_Session {
             $this->CI->db->delete($this->sess_table_name);
         }
 
-        
+
         $_SESSION[$this->sess_cookie_name] = addslashes(serialize(array()));
     }
 
